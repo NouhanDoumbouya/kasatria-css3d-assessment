@@ -13,7 +13,7 @@
 body {
   margin: 0;
   overflow: hidden;
-  background: radial-gradient(circle at 20% 20%, #0b121d 0%, #05070b 60%, #020305 100%);
+  background: radial-gradient(circle at 20% 20%, #0b121d 0%, #05070b 55%, #020305 100%);
   color: #e6f4ff;
 }
 
@@ -112,9 +112,9 @@ body {
   align-items: center;
   padding: 10px 14px;
   border-radius: 14px;
-  background: rgba(9, 14, 24, 0.85);
+  background: rgba(6, 12, 20, 0.85);
   color: #f8fbff;
-  box-shadow: 0 12px 32px rgba(9, 16, 30, 0.25);
+  box-shadow: 0 12px 32px rgba(2, 8, 14, 0.45);
   backdrop-filter: blur(10px);
 }
 
@@ -125,30 +125,35 @@ body {
 
 #menu {
   position: fixed;
-  right: 16px;
-  top: 16px;
+  bottom: 20px;
+  width: 100%;
   z-index: 10;
   display: flex;
-  gap: 10px;
+  gap: 8px;
   align-items: center;
+  justify-content: center;
+  pointer-events: none;
 }
 
 #menu button {
   border: none;
-  padding: 8px 14px;
-  border-radius: 10px;
-  background: rgba(15, 26, 44, 0.9);
-  color: #e7f0ff;
-  font-weight: 700;
-  letter-spacing: 0.03em;
+  padding: 6px 12px;
+  border-radius: 2px;
+  background: transparent;
+  color: rgba(143, 255, 255, 0.85);
+  font-weight: 600;
+  letter-spacing: 0.08em;
   cursor: pointer;
   text-transform: uppercase;
-  transition: transform 0.2s ease, background 0.2s ease;
+  outline: 1px solid rgba(127, 255, 255, 0.6);
+  transition: transform 0.2s ease, background 0.2s ease, color 0.2s ease;
+  pointer-events: auto;
 }
 
 #menu button:hover {
-  background: rgba(32, 52, 86, 0.9);
+  background: rgba(0, 255, 255, 0.25);
   transform: translateY(-1px);
+  color: rgba(255, 255, 255, 0.95);
 }
 
 #legend {
@@ -157,8 +162,10 @@ body {
   gap: 6px;
   font-size: 0.7rem;
   font-weight: 600;
-  color: rgba(231, 240, 255, 0.8);
+  color: rgba(143, 255, 255, 0.85);
   text-transform: uppercase;
+  margin-left: 10px;
+  pointer-events: auto;
 }
 
 .legend-bar {
@@ -166,45 +173,47 @@ body {
   height: 10px;
   border-radius: 999px;
   background: linear-gradient(90deg, #f14444, #f3a12f 45%, #3ad38b);
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.2);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.25);
 }
 
 .element {
-  width: 180px;
-  height: 220px;
-  padding: 10px 12px;
-  border-radius: 10px;
-  border: 2px solid rgba(255, 255, 255, 0.08);
-  box-shadow: 0 18px 36px rgba(0, 0, 0, 0.4);
+  width: 150px;
+  height: 200px;
+  padding: 10px 10px;
+  border-radius: 6px;
+  border: 1px solid rgba(127, 255, 255, 0.35);
+  box-shadow: 0 0 12px rgba(0, 255, 255, 0.35);
   display: grid;
   grid-template-rows: auto auto auto auto auto auto;
   gap: 6px;
-  background: #122b2f;
+  background: rgba(10, 36, 38, 0.85);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
 .element:hover {
   transform: translateZ(12px) scale(1.03);
-  box-shadow: 0 24px 48px rgba(0, 0, 0, 0.55);
+  box-shadow: 0 0 16px rgba(0, 255, 255, 0.6);
+  border-color: rgba(127, 255, 255, 0.75);
 }
 
 .element .index {
   font-size: 0.68rem;
   font-weight: 600;
   letter-spacing: 0.12em;
-  color: rgba(230, 244, 255, 0.6);
+  color: rgba(127, 255, 255, 0.75);
 }
 
 .element .photo {
   width: 100%;
-  height: 96px;
-  border-radius: 8px;
-  background: rgba(2, 6, 10, 0.6);
+  height: 90px;
+  border-radius: 6px;
+  background: rgba(0, 0, 0, 0.45);
   display: grid;
   place-items: center;
   overflow: hidden;
   font-size: 0.7rem;
-  color: rgba(255, 255, 255, 0.6);
+  color: rgba(255, 255, 255, 0.7);
 }
 
 .element .photo img {
@@ -214,39 +223,39 @@ body {
 }
 
 .element .name {
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   font-weight: 700;
-  color: #f4fbff;
+  color: rgba(255, 255, 255, 0.85);
 }
 
 .element .meta {
-  font-size: 0.72rem;
-  color: rgba(230, 244, 255, 0.75);
+  font-size: 0.7rem;
+  color: rgba(127, 255, 255, 0.75);
 }
 
 .element .worth {
   margin-top: auto;
-  font-size: 0.76rem;
+  font-size: 0.7rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  color: rgba(5, 10, 15, 0.9);
-  background: rgba(255, 255, 255, 0.85);
-  border-radius: 6px;
+  color: rgba(8, 10, 14, 0.9);
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 4px;
   padding: 4px 6px;
   text-align: center;
 }
 
 .element.worth-low {
-  background: linear-gradient(135deg, #8b1d1d, #f14444);
+  background: linear-gradient(135deg, rgba(120, 18, 18, 0.95), rgba(241, 68, 68, 0.95));
 }
 
 .element.worth-mid {
-  background: linear-gradient(135deg, #8d4c10, #f3a12f);
+  background: linear-gradient(135deg, rgba(126, 74, 18, 0.95), rgba(243, 161, 47, 0.95));
 }
 
 .element.worth-high {
-  background: linear-gradient(135deg, #0f5b33, #3ad38b);
+  background: linear-gradient(135deg, rgba(9, 84, 47, 0.95), rgba(58, 211, 139, 0.95));
 }
 
 .element.worth-unknown {
@@ -260,14 +269,12 @@ body {
   }
 
   #menu {
-    top: auto;
     bottom: 16px;
-    right: 16px;
   }
 
   .element {
-    width: 160px;
-    height: 200px;
+    width: 140px;
+    height: 190px;
   }
 
   .auth-card {
