@@ -112,9 +112,10 @@ function normalizeRows(header, rows) {
     );
 
   const idxName = indexFor(["name", "full name", "person"]);
-  const idxTitle = indexFor(["title", "position", "role", "designation"]);
-  const idxCompany = indexFor(["company", "organization", "employer", "org"]);
-  const idxLocation = indexFor(["location", "country", "city", "state"]);
+  const idxPhoto = indexFor(["photo", "image", "avatar"]);
+  const idxAge = indexFor(["age"]);
+  const idxCountry = indexFor(["country", "nation", "location"]);
+  const idxInterest = indexFor(["interest", "hobby", "hobbies"]);
   const idxWorth = indexFor(["net worth", "networth", "worth", "wealth"]);
 
   return rows
@@ -123,9 +124,10 @@ function normalizeRows(header, rows) {
       const rawWorth = idxWorth >= 0 ? row[idxWorth] : "";
       return {
         name: (idxName >= 0 ? row[idxName] : "") || `Person ${index + 1}`,
-        title: (idxTitle >= 0 ? row[idxTitle] : "") || "",
-        company: (idxCompany >= 0 ? row[idxCompany] : "") || "",
-        location: (idxLocation >= 0 ? row[idxLocation] : "") || "",
+        photo: (idxPhoto >= 0 ? row[idxPhoto] : "") || "",
+        age: (idxAge >= 0 ? row[idxAge] : "") || "",
+        country: (idxCountry >= 0 ? row[idxCountry] : "") || "",
+        interest: (idxInterest >= 0 ? row[idxInterest] : "") || "",
         netWorthRaw: rawWorth || "",
         netWorthValue: parseNetWorth(rawWorth),
       };
@@ -204,30 +206,48 @@ function buildObjects(records) {
     const worthClass = getWorthClass(record.netWorthValue);
     element.classList.add(worthClass);
 
-    const name = document.createElement("div");
-    name.className = "name";
-    name.textContent = record.name;
-
-    const title = document.createElement("div");
-    title.className = "title";
-    title.textContent = record.title || record.company || record.location || "";
-
-    const meta = document.createElement("div");
-    meta.className = "meta";
-    meta.textContent = [record.company, record.location].filter(Boolean).join(" • ");
-
-    const worth = document.createElement("div");
-    worth.className = "worth";
-    worth.textContent = record.netWorthRaw ? `Net Worth: ${record.netWorthRaw}` : "Net Worth: —";
-
     const index = document.createElement("div");
     index.className = "index";
     index.textContent = String(i + 1).padStart(3, "0");
 
+    const photo = document.createElement("div");
+    photo.className = "photo";
+    if (record.photo) {
+      const img = document.createElement("img");
+      img.src = record.photo;
+      img.alt = record.name;
+      img.loading = "lazy";
+      photo.appendChild(img);
+    } else {
+      photo.textContent = "No Photo";
+    }
+
+    const name = document.createElement("div");
+    name.className = "name";
+    name.textContent = record.name;
+
+    const age = document.createElement("div");
+    age.className = "meta";
+    age.textContent = record.age ? `Age ${record.age}` : "";
+
+    const country = document.createElement("div");
+    country.className = "meta";
+    country.textContent = record.country || "";
+
+    const interest = document.createElement("div");
+    interest.className = "meta";
+    interest.textContent = record.interest ? `Interest: ${record.interest}` : "";
+
+    const worth = document.createElement("div");
+    worth.className = "worth";
+    worth.textContent = record.netWorthRaw ? record.netWorthRaw : "—";
+
     element.appendChild(index);
+    element.appendChild(photo);
     element.appendChild(name);
-    element.appendChild(title);
-    element.appendChild(meta);
+    element.appendChild(age);
+    element.appendChild(country);
+    element.appendChild(interest);
     element.appendChild(worth);
 
     const object = new CSS3DObject(element);
