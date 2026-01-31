@@ -2,12 +2,28 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>kasatria-css3d-assessment</title>
+    <title>Kasatria CSS3D Assessment</title>
+
+    <!-- Google Identity Services -->
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
   </head>
+
   <body>
-    <div id="app"></div>
+    <div id="authPanel">
+      <button id="signin">Sign in with Google</button>
+      <span id="status">Signed out</span>
+    </div>
+
+    <div id="container"></div>
+
+    <div id="menu" style="display: none">
+      <button id="table">TABLE</button>
+      <button id="sphere">SPHERE</button>
+      <button id="helix">HELIX</button>
+      <button id="grid">GRID</button>
+    </div>
+
     <script type="module" src="/src/main.js"></script>
   </body>
 </html>
