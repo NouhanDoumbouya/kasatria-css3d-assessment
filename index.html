@@ -10,8 +10,21 @@
   </head>
 
   <body>
+    <div id="authOverlay">
+      <div class="auth-card">
+        <h1>Sign In With Google</h1>
+        <div class="auth-box">
+          <div class="auth-message">Welcome Back</div>
+          <div class="auth-sub">Sign in to load the sheet data.</div>
+          <button id="signin" class="google-btn">
+            <span class="google-icon">G</span>
+            Sign in with Google
+          </button>
+        </div>
+      </div>
+    </div>
+
     <div id="authPanel">
-      <button id="signin">Sign in with Google</button>
       <span id="status">Signed out</span>
     </div>
 
@@ -22,6 +35,11 @@
       <button id="sphere">SPHERE</button>
       <button id="helix">HELIX</button>
       <button id="grid">GRID</button>
+      <div id="legend">
+        <span>LOW</span>
+        <div class="legend-bar"></div>
+        <span>HIGH</span>
+      </div>
     </div>
 
     <script type="module" src="/src/main.js"></script>

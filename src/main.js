@@ -11,6 +11,7 @@ const RANGE = import.meta.env.VITE_SHEET_RANGE || "Sheet1!A1:Z";
 
 const statusEl = document.getElementById("status");
 const signinBtn = document.getElementById("signin");
+const authOverlay = document.getElementById("authOverlay");
 const menuEl = document.getElementById("menu");
 const container = document.getElementById("container");
 
@@ -47,8 +48,13 @@ async function boot() {
       try {
         const { header, rows } = await fetchSheet();
         const records = normalizeRows(header, rows);
-        status(`Fetched ${records.length} rows.`);
-        initScene(records);
+        if (records.length < 200) {
+          status(`Fetched ${records.length} rows. Need 200 to fill 20x10/5x4x10.`);
+        } else {
+          status(`Fetched ${records.length} rows.`);
+        }
+        initScene(records.slice(0, 200));
+        authOverlay.classList.add("hidden");
         menuEl.style.display = "flex";
       } catch (e) {
         console.error(e);
