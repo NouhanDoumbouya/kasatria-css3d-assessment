@@ -5,6 +5,7 @@ import { CSS3DRenderer, CSS3DObject } from "three/examples/jsm/renderers/CSS3DRe
 import { TrackballControls } from "three/examples/jsm/controls/TrackballControls.js";
 import TWEEN from "three/examples/jsm/libs/tween.module.js";
 
+// Google OAuth + Sheets configuration (provided via Vite env).
 const CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID;
 const SPREADSHEET_ID = import.meta.env.VITE_SPREADSHEET_ID;
 const RANGE = import.meta.env.VITE_SHEET_RANGE || "Sheet1!A1:Z";
@@ -32,6 +33,7 @@ const targets = {
 
 boot();
 
+// Entry point: wait for Google SDK, then bind the OAuth flow.
 async function boot() {
   status("Waiting for Google script…");
   await waitForGoogle();
@@ -75,6 +77,7 @@ function status(msg) {
   statusEl.textContent = msg;
 }
 
+// Poll for the Google Identity Services SDK to load.
 function waitForGoogle() {
   return new Promise((resolve) => {
     const tick = () => {
@@ -85,6 +88,7 @@ function waitForGoogle() {
   });
 }
 
+// Read the sheet values using the OAuth access token.
 async function fetchSheet() {
   if (!accessToken) throw new Error("No access token");
 
@@ -110,6 +114,7 @@ async function fetchSheet() {
   return { header, rows };
 }
 
+// Map arbitrary header names to our expected fields.
 function normalizeRows(header, rows) {
   const keys = header.map((cell) => cell.trim());
   const indexFor = (candidates) =>
@@ -147,6 +152,7 @@ function normalizeKey(value) {
     .trim();
 }
 
+// Accepts values like "$251,260.80", "100K", or "0.2M".
 function parseNetWorth(value) {
   if (value == null) return null;
   const raw = String(value).trim();
@@ -164,6 +170,7 @@ function parseNetWorth(value) {
   return number * multiplier;
 }
 
+// Initialize Three.js scene, renderer, and controls.
 function initScene(records) {
   cleanupScene();
 
@@ -190,6 +197,7 @@ function initScene(records) {
   animate();
 }
 
+// Remove existing renderer/controls when re-initializing.
 function cleanupScene() {
   if (animationId) cancelAnimationFrame(animationId);
   if (controls) controls.dispose();
@@ -204,6 +212,7 @@ function cleanupScene() {
   targets.grid.length = 0;
 }
 
+// Create the CSS3D tiles from sheet records.
 function buildObjects(records) {
   records.forEach((record, i) => {
     const element = document.createElement("div");
@@ -264,6 +273,7 @@ function buildObjects(records) {
   });
 }
 
+// Net worth color buckets (used only for tile background).
 function getWorthClass(netWorthValue) {
   if (netWorthValue == null) return "worth-unknown";
   if (netWorthValue < 100_000) return "worth-low";
@@ -271,6 +281,7 @@ function getWorthClass(netWorthValue) {
   return "worth-high";
 }
 
+// Build all layout targets for the current record count.
 function buildTargets(count) {
   buildTableTargets(count);
   buildSphereTargets(count);
@@ -278,6 +289,7 @@ function buildTargets(count) {
   buildGridTargets(count);
 }
 
+// Table layout: fixed 20x10 grid.
 function buildTableTargets(count) {
   const columns = 20;
   const rows = 10;
@@ -297,6 +309,7 @@ function buildTableTargets(count) {
   }
 }
 
+// Sphere layout based on a golden spiral distribution.
 function buildSphereTargets(count) {
   const radius = 900;
 
@@ -316,6 +329,7 @@ function buildSphereTargets(count) {
   }
 }
 
+// Double helix layout (two alternating strands).
 function buildHelixTargets(count) {
   const radius = 1000;
   const separation = 28;
@@ -336,6 +350,7 @@ function buildHelixTargets(count) {
   }
 }
 
+// Grid layout: 5x4x10.
 function buildGridTargets(count) {
   const gridX = 5;
   const gridY = 4;
@@ -356,6 +371,7 @@ function buildGridTargets(count) {
   }
 }
 
+// Menu buttons drive the transform animations.
 function setMenuHandlers() {
   const tableBtn = document.getElementById("table");
   const sphereBtn = document.getElementById("sphere");
@@ -368,6 +384,7 @@ function setMenuHandlers() {
   gridBtn.addEventListener("click", () => transform(targets.grid, 2000));
 }
 
+// Tween from current positions to target layout.
 function transform(targetsList, duration) {
   TWEEN.removeAll();
 
@@ -405,6 +422,7 @@ function onWindowResize() {
   render();
 }
 
+// Main loop: update tween + controls, then render.
 function animate() {
   animationId = requestAnimationFrame(animate);
   TWEEN.update();
