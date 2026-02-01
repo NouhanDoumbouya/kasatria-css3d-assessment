@@ -317,16 +317,16 @@ function buildSphereTargets(count) {
 }
 
 function buildHelixTargets(count) {
-  const radius = 800;
-  const separation = 18;
+  const radius = 1000;
+  const separation = 28;
 
   for (let i = 0; i < count; i += 1) {
     const strand = i % 2;
-    const angle = i * 0.35 + (strand === 0 ? 0 : Math.PI);
+    const angle = i * 0.4 + (strand === 0 ? 0 : Math.PI);
     const object = new THREE.Object3D();
 
     object.position.x = radius * Math.sin(angle);
-    object.position.y = -(i * separation) + count * separation * 0.35;
+    object.position.y = -(i * separation) + count * separation * 0.5;
     object.position.z = radius * Math.cos(angle);
 
     const lookAt = new THREE.Vector3(object.position.x * 2, object.position.y, object.position.z * 2);
