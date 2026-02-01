@@ -244,17 +244,12 @@ function buildObjects(records) {
     interest.className = "meta";
     interest.textContent = record.interest ? `Interest: ${record.interest}` : "";
 
-    const worth = document.createElement("div");
-    worth.className = "worth";
-    worth.textContent = record.netWorthRaw ? record.netWorthRaw : "—";
-
     element.appendChild(index);
     element.appendChild(photo);
     element.appendChild(name);
     element.appendChild(age);
     element.appendChild(country);
     element.appendChild(interest);
-    element.appendChild(worth);
 
     const object = new CSS3DObject(element);
     object.position.x = Math.random() * 4000 - 2000;
