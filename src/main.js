@@ -222,7 +222,7 @@ function buildObjects(records) {
     header.appendChild(country);
     const age = document.createElement("div");
     age.className = "age";
-    age.textContent = record.age ? `Age ${record.age}` : "";
+    age.textContent = record.age || "";
 
     header.appendChild(age);
 
