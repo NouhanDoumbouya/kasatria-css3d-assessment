@@ -4,11 +4,23 @@ import * as THREE from "three";
 import { CSS3DRenderer, CSS3DObject } from "three/examples/jsm/renderers/CSS3DRenderer.js";
 import { TrackballControls } from "three/examples/jsm/controls/TrackballControls.js";
 import TWEEN from "three/examples/jsm/libs/tween.module.js";
+import { el, append } from "./ui.js";
 
 // Google OAuth + Sheets configuration (provided via Vite env).
 const CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID;
 const SPREADSHEET_ID = import.meta.env.VITE_SPREADSHEET_ID;
 const RANGE = import.meta.env.VITE_SHEET_RANGE || "Sheet1!A1:Z";
+
+const CONFIG = {
+  cameraZ: 2600,
+  table: { columns: 20, rows: 10, spacingX: 140, spacingY: 180 },
+  sphere: { radius: 900 },
+  helix: { radius: 1000, separation: 28, angleStep: 0.4 },
+  grid: { x: 5, y: 4, z: 10, spacing: 320 },
+  netWorth: { low: 100_000, high: 200_000 },
+};
+
+const MAX_RECORDS = CONFIG.table.columns * CONFIG.table.rows;
 
 const statusEl = document.getElementById("status");
 const signinBtn = document.getElementById("signin");
@@ -50,12 +62,12 @@ async function boot() {
       try {
         const { header, rows } = await fetchSheet();
         const records = normalizeRows(header, rows);
-        if (records.length < 200) {
-          status(`Fetched ${records.length} rows. Need 200 to fill 20x10/5x4x10.`);
+        if (records.length < MAX_RECORDS) {
+          status(`Fetched ${records.length} rows. Need ${MAX_RECORDS} to fill 20x10/5x4x10.`);
         } else {
           status(`Fetched ${records.length} rows.`);
         }
-        initScene(records.slice(0, 200));
+        initScene(records.slice(0, MAX_RECORDS));
         authOverlay.classList.add("hidden");
         menuEl.style.display = "flex";
       } catch (e) {
@@ -129,6 +141,15 @@ function normalizeRows(header, rows) {
   const idxInterest = indexFor(["interest", "hobby", "hobbies"]);
   const idxWorth = indexFor(["net worth", "networth", "worth", "wealth"]);
 
+  warnOnMissingColumns({
+    Name: idxName,
+    Photo: idxPhoto,
+    Age: idxAge,
+    Country: idxCountry,
+    Interest: idxInterest,
+    "Net Worth": idxWorth,
+  });
+
   return rows
     .filter((row) => row.some((cell) => String(cell || "").trim() !== ""))
     .map((row, index) => {
@@ -150,6 +171,25 @@ function normalizeKey(value) {
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, "")
     .trim();
+}
+
+function warnOnMissingColumns(indexes) {
+  const missing = Object.entries(indexes)
+    .filter(([, idx]) => idx < 0)
+    .map(([label]) => label);
+  if (missing.length) {
+    console.warn(`Missing expected columns: ${missing.join(", ")}`);
+  }
+}
+
+function isValidUrl(value) {
+  if (!value) return false;
+  try {
+    new URL(value);
+    return true;
+  } catch {
+    return false;
+  }
 }
 
 // Accepts values like "$251,260.80", "100K", or "0.2M".
@@ -176,7 +216,7 @@ function initScene(records) {
 
   scene = new THREE.Scene();
   camera = new THREE.PerspectiveCamera(40, window.innerWidth / window.innerHeight, 1, 10000);
-  camera.position.z = 2600;
+  camera.position.z = CONFIG.cameraZ;
 
   renderer = new CSS3DRenderer();
   renderer.setSize(window.innerWidth, window.innerHeight);
@@ -215,30 +255,22 @@ function cleanupScene() {
 // Create the CSS3D tiles from sheet records.
 function buildObjects(records) {
   records.forEach((record, i) => {
-    const element = document.createElement("div");
-    element.className = "element";
+    const element = el("div", "element");
 
     const worthClass = getWorthClass(record.netWorthValue);
     element.classList.add(worthClass);
 
-    const header = document.createElement("div");
-    header.className = "header";
+    const header = el("div", "header");
 
-    const country = document.createElement("div");
-    country.className = "country";
-    country.textContent = record.country || "";
+    const country = el("div", "country", record.country || "");
 
-    header.appendChild(country);
-    const age = document.createElement("div");
-    age.className = "age";
-    age.textContent = record.age || "";
+    const age = el("div", "age", record.age || "");
 
-    header.appendChild(age);
+    append(header, country, age);
 
-    const photo = document.createElement("div");
-    photo.className = "photo";
-    if (record.photo) {
-      const img = document.createElement("img");
+    const photo = el("div", "photo");
+    if (isValidUrl(record.photo)) {
+      const img = el("img");
       img.src = record.photo;
       img.alt = record.name;
       img.loading = "lazy";
@@ -247,21 +279,13 @@ function buildObjects(records) {
       photo.textContent = "No Photo";
     }
 
-    const interest = document.createElement("div");
-    interest.className = "role";
-    interest.textContent = record.interest || "";
+    const interest = el("div", "role", record.interest || "");
 
-    const footer = document.createElement("div");
-    footer.className = "footer";
-    const name = document.createElement("div");
-    name.className = "name";
-    name.textContent = record.name;
-    footer.appendChild(name);
-    footer.appendChild(interest);
+    const footer = el("div", "footer");
+    const name = el("div", "name", record.name);
+    append(footer, name, interest);
 
-    element.appendChild(header);
-    element.appendChild(photo);
-    element.appendChild(footer);
+    append(element, header, photo, footer);
 
     const object = new CSS3DObject(element);
     object.position.x = Math.random() * 4000 - 2000;
@@ -276,8 +300,8 @@ function buildObjects(records) {
 // Net worth color buckets (used only for tile background).
 function getWorthClass(netWorthValue) {
   if (netWorthValue == null) return "worth-unknown";
-  if (netWorthValue < 100_000) return "worth-low";
-  if (netWorthValue < 200_000) return "worth-mid";
+  if (netWorthValue < CONFIG.netWorth.low) return "worth-low";
+  if (netWorthValue < CONFIG.netWorth.high) return "worth-mid";
   return "worth-high";
 }
 
@@ -291,10 +315,7 @@ function buildTargets(count) {
 
 // Table layout: fixed 20x10 grid.
 function buildTableTargets(count) {
-  const columns = 20;
-  const rows = 10;
-  const spacingX = 140;
-  const spacingY = 180;
+  const { columns, rows, spacingX, spacingY } = CONFIG.table;
   const offsetX = (columns - 1) * spacingX * 0.5;
   const offsetY = (rows - 1) * spacingY * 0.5;
 
@@ -311,7 +332,7 @@ function buildTableTargets(count) {
 
 // Sphere layout based on a golden spiral distribution.
 function buildSphereTargets(count) {
-  const radius = 900;
+  const { radius } = CONFIG.sphere;
 
   for (let i = 0; i < count; i += 1) {
     const phi = Math.acos(-1 + (2 * i) / count);
@@ -331,12 +352,11 @@ function buildSphereTargets(count) {
 
 // Double helix layout (two alternating strands).
 function buildHelixTargets(count) {
-  const radius = 1000;
-  const separation = 28;
+  const { radius, separation, angleStep } = CONFIG.helix;
 
   for (let i = 0; i < count; i += 1) {
     const strand = i % 2;
-    const angle = i * 0.4 + (strand === 0 ? 0 : Math.PI);
+    const angle = i * angleStep + (strand === 0 ? 0 : Math.PI);
     const object = new THREE.Object3D();
 
     object.position.x = radius * Math.sin(angle);
@@ -352,10 +372,7 @@ function buildHelixTargets(count) {
 
 // Grid layout: 5x4x10.
 function buildGridTargets(count) {
-  const gridX = 5;
-  const gridY = 4;
-  const gridZ = 10;
-  const spacing = 320;
+  const { x: gridX, y: gridY, z: gridZ, spacing } = CONFIG.grid;
 
   for (let i = 0; i < count; i += 1) {
     const object = new THREE.Object3D();
