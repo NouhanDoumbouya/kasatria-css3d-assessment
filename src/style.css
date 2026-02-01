@@ -218,7 +218,7 @@ body {
   color: rgba(127, 255, 255, 0.85);
 }
 
-.element .top-name {
+.element .age {
   font-size: 0.7rem;
   font-weight: 600;
   text-align: right;
@@ -248,6 +248,12 @@ body {
   text-align: center;
   display: grid;
   gap: 4px;
+}
+
+.element .name {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.9);
 }
 
 .element .role {

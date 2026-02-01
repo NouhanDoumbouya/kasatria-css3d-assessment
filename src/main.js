@@ -223,12 +223,12 @@ function buildObjects(records) {
     country.className = "country";
     country.textContent = record.country || "";
 
-    const topName = document.createElement("div");
-    topName.className = "top-name";
-    topName.textContent = record.name;
-
     header.appendChild(country);
-    header.appendChild(topName);
+    const age = document.createElement("div");
+    age.className = "age";
+    age.textContent = record.age ? `Age ${record.age}` : "";
+
+    header.appendChild(age);
 
     const photo = document.createElement("div");
     photo.className = "photo";
@@ -248,6 +248,10 @@ function buildObjects(records) {
 
     const footer = document.createElement("div");
     footer.className = "footer";
+    const name = document.createElement("div");
+    name.className = "name";
+    name.textContent = record.name;
+    footer.appendChild(name);
     footer.appendChild(interest);
 
     element.appendChild(index);
