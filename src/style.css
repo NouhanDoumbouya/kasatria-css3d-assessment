@@ -247,12 +247,18 @@ body {
   font-size: 0.95rem;
   font-weight: 700;
   color: rgba(255, 255, 255, 0.9);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .element .role {
   font-size: 0.7rem;
   font-weight: 600;
   color: rgba(127, 255, 255, 0.8);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .element .worth {
