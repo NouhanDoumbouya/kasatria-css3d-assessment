@@ -197,13 +197,6 @@ body {
   border-color: rgba(127, 255, 255, 0.75);
 }
 
-.element .index {
-  font-size: 0.68rem;
-  font-weight: 600;
-  letter-spacing: 0.12em;
-  color: rgba(127, 255, 255, 0.75);
-}
-
 .element .header {
   display: flex;
   align-items: baseline;

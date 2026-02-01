@@ -212,10 +212,6 @@ function buildObjects(records) {
     const worthClass = getWorthClass(record.netWorthValue);
     element.classList.add(worthClass);
 
-    const index = document.createElement("div");
-    index.className = "index";
-    index.textContent = String(i + 1).padStart(3, "0");
-
     const header = document.createElement("div");
     header.className = "header";
 
@@ -254,7 +250,6 @@ function buildObjects(records) {
     footer.appendChild(name);
     footer.appendChild(interest);
 
-    element.appendChild(index);
     element.appendChild(header);
     element.appendChild(photo);
     element.appendChild(footer);
