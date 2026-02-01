@@ -184,7 +184,7 @@ body {
   border: 1px solid rgba(127, 255, 255, 0.35);
   box-shadow: 0 0 12px rgba(0, 255, 255, 0.35);
   display: grid;
-  grid-template-rows: auto auto auto auto auto auto;
+  grid-template-rows: auto auto 1fr auto auto;
   gap: 6px;
   background: rgba(10, 36, 38, 0.85);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
@@ -202,6 +202,27 @@ body {
   font-weight: 600;
   letter-spacing: 0.12em;
   color: rgba(127, 255, 255, 0.75);
+}
+
+.element .header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 6px;
+}
+
+.element .country {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: rgba(127, 255, 255, 0.85);
+}
+
+.element .top-name {
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-align: right;
+  color: rgba(255, 255, 255, 0.8);
 }
 
 .element .photo {
@@ -222,15 +243,28 @@ body {
   object-fit: cover;
 }
 
-.element .name {
-  font-size: 0.9rem;
-  font-weight: 700;
-  color: rgba(255, 255, 255, 0.85);
-}
-
 .element .meta {
   font-size: 0.7rem;
   color: rgba(127, 255, 255, 0.75);
+}
+
+.element .footer {
+  margin-top: auto;
+  text-align: center;
+  display: grid;
+  gap: 4px;
+}
+
+.element .name {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.element .role {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: rgba(127, 255, 255, 0.8);
 }
 
 .element .worth {

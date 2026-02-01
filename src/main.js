@@ -216,6 +216,20 @@ function buildObjects(records) {
     index.className = "index";
     index.textContent = String(i + 1).padStart(3, "0");
 
+    const header = document.createElement("div");
+    header.className = "header";
+
+    const country = document.createElement("div");
+    country.className = "country";
+    country.textContent = record.country || "";
+
+    const topName = document.createElement("div");
+    topName.className = "top-name";
+    topName.textContent = record.name;
+
+    header.appendChild(country);
+    header.appendChild(topName);
+
     const photo = document.createElement("div");
     photo.className = "photo";
     if (record.photo) {
@@ -236,20 +250,20 @@ function buildObjects(records) {
     age.className = "meta";
     age.textContent = record.age ? `Age ${record.age}` : "";
 
-    const country = document.createElement("div");
-    country.className = "meta";
-    country.textContent = record.country || "";
-
     const interest = document.createElement("div");
-    interest.className = "meta";
-    interest.textContent = record.interest ? `Interest: ${record.interest}` : "";
+    interest.className = "role";
+    interest.textContent = record.interest || "";
+
+    const footer = document.createElement("div");
+    footer.className = "footer";
+    footer.appendChild(name);
+    footer.appendChild(interest);
 
     element.appendChild(index);
+    element.appendChild(header);
     element.appendChild(photo);
-    element.appendChild(name);
     element.appendChild(age);
-    element.appendChild(country);
-    element.appendChild(interest);
+    element.appendChild(footer);
 
     const object = new CSS3DObject(element);
     object.position.x = Math.random() * 4000 - 2000;
