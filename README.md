@@ -31,3 +31,15 @@ CSS3D periodic-table style visualization driven by Google Sheets data, built for
 
 - If fewer than 200 rows are present in the sheet, the scene still loads but with fewer tiles.
 - Invalid or missing photo URLs fall back to a “No Photo” placeholder.
+
+## Deploy (Vercel)
+
+1. Import the repo into Vercel.
+2. Set framework to **Vite**.
+3. Build Command: `npm run build`
+4. Output Directory: `dist`
+5. Add Environment Variables:
+   - `VITE_GOOGLE_CLIENT_ID`
+   - `VITE_SPREADSHEET_ID`
+   - `VITE_SHEET_RANGE` (optional; default `Sheet1!A1:Z`)
+6. Deploy.
