@@ -242,27 +242,17 @@ function buildObjects(records) {
       photo.textContent = "No Photo";
     }
 
-    const name = document.createElement("div");
-    name.className = "name";
-    name.textContent = record.name;
-
-    const age = document.createElement("div");
-    age.className = "meta";
-    age.textContent = record.age ? `Age ${record.age}` : "";
-
     const interest = document.createElement("div");
     interest.className = "role";
     interest.textContent = record.interest || "";
 
     const footer = document.createElement("div");
     footer.className = "footer";
-    footer.appendChild(name);
     footer.appendChild(interest);
 
     element.appendChild(index);
     element.appendChild(header);
     element.appendChild(photo);
-    element.appendChild(age);
     element.appendChild(footer);
 
     const object = new CSS3DObject(element);

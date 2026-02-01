@@ -243,22 +243,11 @@ body {
   object-fit: cover;
 }
 
-.element .meta {
-  font-size: 0.7rem;
-  color: rgba(127, 255, 255, 0.75);
-}
-
 .element .footer {
   margin-top: auto;
   text-align: center;
   display: grid;
   gap: 4px;
-}
-
-.element .name {
-  font-size: 0.9rem;
-  font-weight: 700;
-  color: rgba(255, 255, 255, 0.9);
 }
 
 .element .role {
